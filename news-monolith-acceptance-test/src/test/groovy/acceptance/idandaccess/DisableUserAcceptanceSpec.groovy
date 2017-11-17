@@ -3,10 +3,10 @@ package acceptance.idandaccess
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
-import pl.pja.s13868.news.mono.identityandaccess.domain.IdAndAccessFacade
-import pl.pja.s13868.news.mono.identityandaccess.domain.IdAndAccessJavaConfig
-import pl.pja.s13868.news.mono.identityandaccess.domain.dto.EnableDisableUserDto
-import pl.pja.s13868.news.mono.identityandaccess.domain.dto.RegisterUserDto
+import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessFacade
+import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessJavaConfig
+import pl.pja.s13868.news.mono.accesscontrol.domain.dto.EnableDisableUserDto
+import pl.pja.s13868.news.mono.accesscontrol.domain.dto.RegisterUserDto
 import spock.lang.Specification
 import spock.lang.Stepwise
 
