@@ -1,19 +1,21 @@
-package acceptance.idandaccess
+package acceptance.accesscontrol
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
 import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessFacade
 import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessJavaConfig
+import pl.pja.s13868.news.mono.accesscontrol.domain.dto.AuthenticateUserDto
 import pl.pja.s13868.news.mono.accesscontrol.domain.dto.EnableDisableUserDto
 import pl.pja.s13868.news.mono.accesscontrol.domain.dto.RegisterUserDto
+import pl.pja.s13868.news.mono.accesscontrol.domain.dto.UserDetailsDto
 import spock.lang.Specification
 import spock.lang.Stepwise
 
 @DirtiesContext
 @SpringBootTest(classes = [IdAndAccessJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
-class EnableUserAcceptanceSpec extends Specification {
+class AuthenticateUserAcceptanceSpec extends Specification {
 
     final USER_NAME = "user"
     final USER_EMAIL = "krzysztof.dzido@gmail.com"
@@ -34,25 +36,32 @@ class EnableUserAcceptanceSpec extends Specification {
             "Poland",
             "Lublin")
 
-    def "should enable user"() {
-        given: "the disabled user present"
-        facade.registerUser(registration)
-        assert facade.user(USER_NAME).get().isEnabled() == false
 
-        when:
+    def "should authenticate user"() {
+        given: "the enabled user present in the system"
+        facade.registerUser(registration)
         facade.enableUser(new EnableDisableUserDto(USER_NAME, true))
 
+        when:
+        def credentials = new AuthenticateUserDto(
+                USER_NAME,
+                USER_PASS)
+        Optional<UserDetailsDto> details = facade.authenticate(credentials)
+
         then:
-        facade.user(USER_NAME).get().isEnabled()
+        details.present
+        details.get().userName == USER_NAME
+        details.get().enabled == true
+        details.get().email == USER_EMAIL
     }
 
-    def "should reject enablement of non-existing user"() {
+    def "should reject authentication of non-existing user"() {
+        when:
+        def credentials = new AuthenticateUserDto('non_existing_user_name','secret')
+        Optional<UserDetailsDto> details = facade.authenticate(credentials)
 
-        when: "enable user that does not exist"
-        facade.enableUser(new EnableDisableUserDto('non-existig-user', true))
-
-        then: "system rejects the enablement"
-        thrown(IllegalStateException)
+        then:
+        details.present == false
     }
 
 }

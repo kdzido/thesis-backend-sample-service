@@ -1,3 +1,4 @@
 rootProject.name = 'news-monolith'
 include 'news-monolith-acceptance-test'
+include 'portal-backend-api-gateway-web'
 

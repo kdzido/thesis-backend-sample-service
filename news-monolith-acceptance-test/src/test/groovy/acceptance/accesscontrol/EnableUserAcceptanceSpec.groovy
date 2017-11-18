@@ -1,4 +1,4 @@
-package acceptance.idandaccess
+package acceptance.accesscontrol
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,7 +13,7 @@ import spock.lang.Stepwise
 @DirtiesContext
 @SpringBootTest(classes = [IdAndAccessJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
-class DisableUserAcceptanceSpec extends Specification {
+class EnableUserAcceptanceSpec extends Specification {
 
     final USER_NAME = "user"
     final USER_EMAIL = "krzysztof.dzido@gmail.com"
@@ -34,23 +34,22 @@ class DisableUserAcceptanceSpec extends Specification {
             "Poland",
             "Lublin")
 
-    def "should disable user"() {
+    def "should enable user"() {
         given: "the disabled user present"
         facade.registerUser(registration)
         assert facade.user(USER_NAME).get().isEnabled() == false
-        facade.enableUser(new EnableDisableUserDto(USER_NAME, true))
 
         when:
-        facade.enableUser(new EnableDisableUserDto(USER_NAME, false))
+        facade.enableUser(new EnableDisableUserDto(USER_NAME, true))
 
         then:
         facade.user(USER_NAME).get().isEnabled()
     }
 
-    def "should reject disabling of non-existing user"() {
+    def "should reject enablement of non-existing user"() {
 
         when: "enable user that does not exist"
-        facade.enableUser(new EnableDisableUserDto('non-existig-user', false))
+        facade.enableUser(new EnableDisableUserDto('non-existig-user', true))
 
         then: "system rejects the enablement"
         thrown(IllegalStateException)
