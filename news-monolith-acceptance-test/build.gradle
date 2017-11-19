@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'groovy'
 apply plugin: 'java'
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
 //    testCompile 'io.cucumber:cucumber-groovy:' + cucumberVersion
     testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
     testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4'
-    testCompile 'org.springframework.boot:spring-boot-starter-test:1.4.5.RELEASE'
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
 
 }
