@@ -34,14 +34,14 @@ class RegisterUserAcceptanceSpec extends Specification {
             "Lublin")
 
     def "should register user"() {
-        given: "the system with no users"
-        assert facade.userCount() == 0
+        given: "the system with with 2 predefined users"
+        assert facade.userCount() == 2
 
         when:
         facade.registerUser(registration)
 
         then:
-        facade.userCount() == 1
+        facade.userCount() == 3
         and:
         def dto = facade.user(PREDEFINED_USER_NAME).get()
         dto.userName == PREDEFINED_USER_NAME
