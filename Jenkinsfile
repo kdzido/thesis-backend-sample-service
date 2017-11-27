@@ -2,9 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Commit Test') {
+        stage('Commit Stage') {
             steps {
                 sh './gradlew check'
+            }
+        }
+        stage('Acceptance Stage') {
+            steps {
+                sh './gradlew :news-monolith-acceptance-test:test'
             }
         }
     }
