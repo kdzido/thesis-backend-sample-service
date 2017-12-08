@@ -3,14 +3,14 @@ package acceptance.accesscontrol
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
-import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessFacade
-import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessJavaConfig
+import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlFacade
+import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlJavaConfig
 import pl.pja.s13868.news.mono.accesscontrol.domain.dto.RegisterUserDto
 import spock.lang.Specification
 import spock.lang.Stepwise
 
 @DirtiesContext
-@SpringBootTest(classes = [IdAndAccessJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
 class RegisterUserAcceptanceSpec extends Specification {
 
@@ -19,7 +19,7 @@ class RegisterUserAcceptanceSpec extends Specification {
     static final String PREDEFINED_USER_PASS = "secret"
 
     @Autowired
-    IdAndAccessFacade facade
+    AccessControlFacade facade
 
     def registration = new RegisterUserDto(
             PREDEFINED_USER_NAME,

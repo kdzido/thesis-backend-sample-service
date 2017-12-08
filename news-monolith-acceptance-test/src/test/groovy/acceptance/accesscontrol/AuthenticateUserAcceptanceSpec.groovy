@@ -3,8 +3,8 @@ package acceptance.accesscontrol
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
-import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessFacade
-import pl.pja.s13868.news.mono.accesscontrol.domain.IdAndAccessJavaConfig
+import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlFacade
+import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlJavaConfig
 import pl.pja.s13868.news.mono.accesscontrol.domain.dto.AuthenticateUserDto
 import pl.pja.s13868.news.mono.accesscontrol.domain.dto.EnableDisableUserDto
 import pl.pja.s13868.news.mono.accesscontrol.domain.dto.RegisterUserDto
@@ -12,8 +12,8 @@ import pl.pja.s13868.news.mono.accesscontrol.domain.dto.UserDetailsDto
 import spock.lang.Specification
 import spock.lang.Stepwise
 
-@DirtiesContext
-@SpringBootTest(classes = [IdAndAccessJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@DirtiesContext // not working??
+@SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
 class AuthenticateUserAcceptanceSpec extends Specification {
 
@@ -22,9 +22,9 @@ class AuthenticateUserAcceptanceSpec extends Specification {
     final USER_PASS = "secret"
 
     @Autowired
-    IdAndAccessFacade facade
+    AccessControlFacade facade
 
-    def registration = new RegisterUserDto(
+    def registerValid = new RegisterUserDto(
             USER_NAME,
             USER_PASS,
             "Full",
@@ -36,32 +36,86 @@ class AuthenticateUserAcceptanceSpec extends Specification {
             "Poland",
             "Lublin")
 
+    def registerDisabled = new RegisterUserDto(
+            "disabled",
+            USER_PASS,
+            "Disabled",
+            "User",
+            USER_EMAIL,
+            null,
+            null,
+            "Bio...",
+            "Poland",
+            "Krakow")
+
+    def registerInactive = new RegisterUserDto(
+            "inacive",
+            USER_PASS,
+            "Inactive",
+            "User",
+            USER_EMAIL,
+            null,
+            null,
+            "Bio...",
+            "Poland",
+            "Lodz")
 
     def "should authenticate user"() {
-        given: "the enabled user present in the system"
-        facade.registerUser(registration)
-        facade.enableUser(new EnableDisableUserDto(USER_NAME, true))
+        given: "enabled and activated user present in system"
+        def activationHash = facade.registerUser(registerValid)
+        facade.activateUser(activationHash)
+        assert facade.user(registerValid.getUserName()).get().isEnabled()
+        assert facade.user(registerValid.getUserName()).get().isActivated()
 
         when:
-        def credentials = new AuthenticateUserDto(
-                USER_NAME,
-                USER_PASS)
+        def credentials = new AuthenticateUserDto(USER_NAME, USER_PASS)
         Optional<UserDetailsDto> details = facade.authenticate(credentials)
 
         then:
         details.present
         details.get().userName == USER_NAME
-        details.get().enabled == true
         details.get().email == USER_EMAIL
     }
 
     def "should reject authentication of non-existing user"() {
+        given:
+        assert facade.user('non_existing_user_name').isPresent() == false
+
         when:
         def credentials = new AuthenticateUserDto('non_existing_user_name','secret')
         Optional<UserDetailsDto> details = facade.authenticate(credentials)
 
         then:
-        details.present == false
+        ! details.present
+    }
+
+    def "should reject authentication of disabled user"() {
+        given:
+        def activationHash = facade.registerUser(registerDisabled)
+        facade.activateUser(activationHash)
+        facade.enableOrDisableUser(new EnableDisableUserDto(registerDisabled.getUserName(), false))
+        assert facade.user(registerDisabled.getUserName()).get().isActivated()
+        assert facade.user(registerDisabled.getUserName()).get().isEnabled() == false
+
+        when:
+        def credentials = new AuthenticateUserDto(registerDisabled.getUserName(), registerDisabled.getPassword())
+        Optional<UserDetailsDto> details = facade.authenticate(credentials)
+        then:
+        ! details.present
+    }
+
+    def "should reject authentication of non-activated user"() {
+        given:
+        facade.registerUser(registerInactive)
+        assert facade.user(registerInactive.getUserName()).get().isEnabled()
+        assert facade.user(registerInactive.getUserName()).get().isActivated() == false
+
+        when:
+        def credentials = new AuthenticateUserDto(registerInactive.getUserName(), registerInactive.getPassword())
+        Optional<UserDetailsDto> details = facade.authenticate(credentials)
+
+        then:
+        ! details.present
     }
 
 }

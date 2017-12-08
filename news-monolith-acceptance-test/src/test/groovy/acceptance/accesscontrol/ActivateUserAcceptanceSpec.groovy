@@ -13,7 +13,7 @@ import spock.lang.Stepwise
 @DirtiesContext
 @SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
-class DisableUserAcceptanceSpec extends Specification {
+class ActivateUserAcceptanceSpec extends Specification {
 
     final USER_NAME = "user"
     final USER_EMAIL = "krzysztof.dzido@gmail.com"
@@ -34,26 +34,35 @@ class DisableUserAcceptanceSpec extends Specification {
             "Poland",
             "Lublin")
 
-    def "should disable user"() {
-        given: "the disabled user present"
-        facade.registerUser(registration)
-        assert facade.user(USER_NAME).get().isEnabled() == false
-        facade.enableOrDisableUser(new EnableDisableUserDto(USER_NAME, true))
+    def "should enable user"() {
+        given: "non-activated user present"
+        def activationHash = facade.registerUser(registration)
+        assert facade.user(USER_NAME).get().isActivated() == false
 
         when:
-        facade.enableOrDisableUser(new EnableDisableUserDto(USER_NAME, false))
-
+        facade.activateUser(activationHash)
         then:
-        facade.user(USER_NAME).get().isEnabled()
+        facade.user(USER_NAME).get().isActivated()
     }
 
-    def "should reject disabling of non-existing user"() {
+    def "should reject activation of already active user"() {
+        given: "activated user present"
+        def activationHash = facade.registerUser(registration)
+        facade.activateUser(activationHash)
+        assert facade.user(USER_NAME).get().isActivated()
 
-        when: "enable user that does not exist"
-        facade.enableOrDisableUser(new EnableDisableUserDto('non-existig-user', false))
-
-        then: "system rejects the enablement"
+        when:
+        facade.activateUser(activationHash)
+        then:
         thrown(IllegalStateException)
     }
+
+    def "should reject activation with invalid hash"() {
+        when:
+        facade.activateUser("invalid_hash")
+        then:
+        thrown(IllegalStateException)
+    }
+
 
 }
