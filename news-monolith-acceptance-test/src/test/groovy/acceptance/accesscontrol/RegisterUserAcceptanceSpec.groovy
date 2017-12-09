@@ -5,6 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
 import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlFacade
 import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlJavaConfig
+import pl.pja.s13868.news.mono.accesscontrol.domain.exception.CannotRegisterUserWithOccupiedEmailException
+import pl.pja.s13868.news.mono.accesscontrol.domain.exception.CannotRegisterUserWithOccupiedUsernameException
 import spock.lang.Specification
 import spock.lang.Stepwise
 
@@ -19,30 +21,42 @@ class RegisterUserAcceptanceSpec extends Specification {
     AccessControlFacade facade
 
     def "should register user"() {
-        given: "the system with with 2 predefined users"
+        given: "2 pre-defined users in the system"
         assert facade.userCount() == 2
 
-        when:
+        when: "I register a new user"
         facade.registerUser(registerUser1())
 
-        then:
+        then: "there are 3 users in the system"
         facade.userCount() == 3
-        and:
+        and: "the new users can be found in the system "
         def dto = facade.user(USER_NAME_1).get()
         dto.userName == USER_NAME_1
         dto.email == USER_EMAIL_1
     }
 
-    def "should reject registration of existing user"() {
-        given: "the existing user"
+    def "should reject same username"() {
+        given: "one existing user"
         facade.registerUser(registerUser1())
         assert facade.user(USER_NAME_1).isPresent()
 
-        when: "registering user with same username"
-        facade.registerUser(registerUser1())
+        when: "registering a new user with the occupied username"
+        facade.registerUser(registerUser2WithSameUsername())
 
         then: "system rejects the user"
-        thrown(IllegalStateException)
+        thrown(CannotRegisterUserWithOccupiedUsernameException)
+    }
+
+    def "should reject same email"() {
+        given: "1 existing user"
+        facade.registerUser(registerUser1())
+        assert facade.user(USER_NAME_1).isPresent()
+
+        when: "registering a new user with the occupied email"
+        facade.registerUser(registerUser3WithSameEmail())
+
+        then: "system rejects the user"
+        thrown(CannotRegisterUserWithOccupiedEmailException)
     }
 
 }

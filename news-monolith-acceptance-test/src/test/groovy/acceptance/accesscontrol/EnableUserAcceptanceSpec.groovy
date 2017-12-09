@@ -11,6 +11,7 @@ import spock.lang.Stepwise
 
 import static acceptance.accesscontrol.MotherObject.*
 
+// TODO is this scenario needed?
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise

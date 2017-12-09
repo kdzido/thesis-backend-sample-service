@@ -38,7 +38,7 @@ class AuthenticateUserAcceptanceSpec extends Specification {
         details.get().email == USER_EMAIL_1
     }
 
-    def "should reject authentication of non-existing user"() {
+    def "should reject non-existing user"() {
         given:
         assert facade.user('non_existing_user_name').isPresent() == false
 
@@ -50,7 +50,7 @@ class AuthenticateUserAcceptanceSpec extends Specification {
         ! details.present
     }
 
-    def "should reject authentication of disabled user"() {
+    def "should reject disabled user"() {
         given:
         def activationHash = facade.registerUser(registerDisabledUser())
         facade.activateUser(activationHash)
@@ -65,7 +65,7 @@ class AuthenticateUserAcceptanceSpec extends Specification {
         ! details.present
     }
 
-    def "should reject authentication of non-activated user"() {
+    def "should reject non-activated user"() {
         given:
         facade.registerUser(registerInactiveUser())
         assert facade.user(registerInactiveUser().getUserName()).get().isEnabled()
