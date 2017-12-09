@@ -1,4 +1,5 @@
 rootProject.name = 'news-monolith'
-include 'news-monolith-acceptance-test'
+include 'news-mono-acceptance-test'
 include 'portal-backend-api-gateway-web'
+include 'news-mono-integration-tests'
 
