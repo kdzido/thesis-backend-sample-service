@@ -18,20 +18,20 @@ class ActivateUserAcceptanceSpec extends Specification {
 
     def "should activate user"() {
         given: "non-activated user present"
-        def activationHash = facade.registerUser(MotherObject.registration())
-        assert facade.user(MotherObject.USER_NAME).get().isActivated() == false
+        def activationHash = facade.registerUser(MotherObject.registerUser1())
+        assert facade.user(MotherObject.USER_NAME_1).get().isActivated() == false
 
         when:
         facade.activateUser(activationHash)
         then:
-        facade.user(MotherObject.USER_NAME).get().isActivated()
+        facade.user(MotherObject.USER_NAME_1).get().isActivated()
     }
 
     def "should reject activation of already active user"() {
         given: "activated user present"
-        def activationHash = facade.registerUser(MotherObject.registration())
+        def activationHash = facade.registerUser(MotherObject.registerUser1())
         facade.activateUser(activationHash)
-        assert facade.user(MotherObject.USER_NAME).get().isActivated()
+        assert facade.user(MotherObject.USER_NAME_1).get().isActivated()
 
         when:
         facade.activateUser(activationHash)

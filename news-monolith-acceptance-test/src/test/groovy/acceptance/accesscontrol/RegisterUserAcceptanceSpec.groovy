@@ -21,23 +21,23 @@ class RegisterUserAcceptanceSpec extends Specification {
         assert facade.userCount() == 2
 
         when:
-        facade.registerUser(MotherObject.registration())
+        facade.registerUser(MotherObject.registerUser1())
 
         then:
         facade.userCount() == 3
         and:
-        def dto = facade.user(MotherObject.USER_NAME).get()
-        dto.userName == MotherObject.USER_NAME
-        dto.email == MotherObject.USER_EMAIL
+        def dto = facade.user(MotherObject.USER_NAME_1).get()
+        dto.userName == MotherObject.USER_NAME_1
+        dto.email == MotherObject.USER_EMAIL_1
     }
 
     def "should reject registration of existing user"() {
         given: "the existing user"
-        facade.registerUser(MotherObject.registration())
-        assert facade.user(MotherObject.USER_NAME).isPresent()
+        facade.registerUser(MotherObject.registerUser1())
+        assert facade.user(MotherObject.USER_NAME_1).isPresent()
 
         when: "registering user with same username"
-        facade.registerUser(MotherObject.registration())
+        facade.registerUser(MotherObject.registerUser1())
 
         then: "system rejects the user"
         thrown(IllegalStateException)

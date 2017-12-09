@@ -19,14 +19,14 @@ class DisableUserAcceptanceSpec extends Specification {
 
     def "should disable user"() {
         given: "the disabled user present"
-        facade.registerUser(MotherObject.registration())
-        assert facade.user(MotherObject.USER_NAME).get().isEnabled() == true
+        facade.registerUser(MotherObject.registerUser1())
+        assert facade.user(MotherObject.USER_NAME_1).get().isEnabled() == true
 
         when:
-        facade.enableOrDisableUser(new EnableDisableUserDto(MotherObject.USER_NAME, false))
+        facade.enableOrDisableUser(new EnableDisableUserDto(MotherObject.USER_NAME_1, false))
 
         then:
-        facade.user(MotherObject.USER_NAME).get().isEnabled() == false
+        facade.user(MotherObject.USER_NAME_1).get().isEnabled() == false
     }
 
     def "should reject disabling of non-existing user"() {
