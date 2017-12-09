@@ -12,7 +12,7 @@ import pl.pja.s13868.news.mono.accesscontrol.domain.dto.UserDetailsDto
 import spock.lang.Specification
 import spock.lang.Stepwise
 
-@DirtiesContext // not working??
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
 class AuthenticateUserAcceptanceSpec extends Specification {
