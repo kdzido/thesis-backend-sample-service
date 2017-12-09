@@ -9,6 +9,8 @@ import pl.pja.s13868.news.mono.accesscontrol.domain.dto.EnableDisableUserDto
 import spock.lang.Specification
 import spock.lang.Stepwise
 
+import static acceptance.accesscontrol.MotherObject.*
+
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
@@ -19,14 +21,14 @@ class DisableUserAcceptanceSpec extends Specification {
 
     def "should disable user"() {
         given: "the disabled user present"
-        facade.registerUser(MotherObject.registerUser1())
-        assert facade.user(MotherObject.USER_NAME_1).get().isEnabled() == true
+        facade.registerUser(registerUser1())
+        assert facade.user(USER_NAME_1).get().isEnabled() == true
 
         when:
-        facade.enableOrDisableUser(new EnableDisableUserDto(MotherObject.USER_NAME_1, false))
+        facade.enableOrDisableUser(new EnableDisableUserDto(USER_NAME_1, false))
 
         then:
-        facade.user(MotherObject.USER_NAME_1).get().isEnabled() == false
+        facade.user(USER_NAME_1).get().isEnabled() == false
     }
 
     def "should reject disabling of non-existing user"() {

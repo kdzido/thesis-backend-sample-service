@@ -8,6 +8,8 @@ import pl.pja.s13868.news.mono.accesscontrol.domain.AccessControlJavaConfig
 import spock.lang.Specification
 import spock.lang.Stepwise
 
+import static acceptance.accesscontrol.MotherObject.*
+
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(classes = [AccessControlJavaConfig], webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Stepwise
@@ -21,23 +23,23 @@ class RegisterUserAcceptanceSpec extends Specification {
         assert facade.userCount() == 2
 
         when:
-        facade.registerUser(MotherObject.registerUser1())
+        facade.registerUser(registerUser1())
 
         then:
         facade.userCount() == 3
         and:
-        def dto = facade.user(MotherObject.USER_NAME_1).get()
-        dto.userName == MotherObject.USER_NAME_1
-        dto.email == MotherObject.USER_EMAIL_1
+        def dto = facade.user(USER_NAME_1).get()
+        dto.userName == USER_NAME_1
+        dto.email == USER_EMAIL_1
     }
 
     def "should reject registration of existing user"() {
         given: "the existing user"
-        facade.registerUser(MotherObject.registerUser1())
-        assert facade.user(MotherObject.USER_NAME_1).isPresent()
+        facade.registerUser(registerUser1())
+        assert facade.user(USER_NAME_1).isPresent()
 
         when: "registering user with same username"
-        facade.registerUser(MotherObject.registerUser1())
+        facade.registerUser(registerUser1())
 
         then: "system rejects the user"
         thrown(IllegalStateException)

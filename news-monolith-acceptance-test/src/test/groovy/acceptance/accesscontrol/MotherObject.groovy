@@ -22,4 +22,32 @@ class MotherObject {
                 "Lublin")
     }
 
+    static RegisterUserDto registerDisabledUser() {
+        new RegisterUserDto(
+                "disabled",
+                USER_PASS_1,
+                "Disabled",
+                "User",
+                USER_EMAIL_1,
+                null,
+                null,
+                "Bio...",
+                "Poland",
+                "Krakow")
+    }
+
+    static RegisterUserDto registerInactiveUser() {
+        new RegisterUserDto(
+                "inacive",
+                USER_PASS_1,
+                "Inactive",
+                "User",
+                USER_EMAIL_1,
+                null,
+                null,
+                "Bio...",
+                "Poland",
+                "Lodz")
+    }
+
 }
