@@ -2,4 +2,5 @@ rootProject.name = 'news-monolith'
 include 'news-mono-acceptance-test'
 include 'portal-backend-api-gateway-web'
 include 'news-mono-integration-tests'
+include 'eureka-server'
 
