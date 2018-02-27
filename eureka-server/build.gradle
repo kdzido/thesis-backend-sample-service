@@ -8,22 +8,24 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
+        classpath 'com.bmuschko:gradle-docker-plugin:3.2.4'
     }
 }
-
-group 'pl.pja.13868.news'
-version '1.0.0-SNAPSHOT'
 
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin    // TODO build docker image with gradle plugin
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+import org.apache.tools.ant.filters.*
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-import org.apache.tools.ant.filters.*
+group 'pl.pja.13868.news'
+version '0.1.0'
 
 repositories {
     mavenCentral()
@@ -64,5 +66,16 @@ task copyDockerFiles(dependsOn: [copyJars], type: Copy) {
     filter(ReplaceTokens, tokens: [springBootJar: springBootJar])
 }
 
-build.dependsOn copyDockerFiles
+// TODO BUILD_NAME env var
+
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn copyDockerFiles
+    inputDir = project.file("$buildDir/dockerfile/Dockerfile").parentFile
+    // TODO tag with build number
+    tag = 'kdzido/eurekaserver:latest'
+}
+
+// TODO pushDockerImage ??
+
+//build.dependsOn buildImage
 
