@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: sampleservice
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      enabled: true
