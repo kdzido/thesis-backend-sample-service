@@ -17,8 +17,8 @@ class SampleController {
     ServiceConfig serviceConfig;
 
     @RequestMapping(value="/config", method = RequestMethod.GET)
-    public String getLicenses() {
-        return "cloud config value: " + serviceConfig.getSampleProperty();
+    public String getConfig() {
+        return "plain value: " + serviceConfig.getSampleProperty() + ", password: " + serviceConfig.getSamplePassword();
     }
 
 }

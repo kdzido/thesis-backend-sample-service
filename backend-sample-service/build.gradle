@@ -46,6 +46,7 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-config-client')
     compile('org.springframework.cloud:spring-cloud-starter-eureka')
 //    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+    compile('org.springframework.security:spring-security-rsa')
 
     testCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
     testCompile "junit:junit:${junitVersion}"

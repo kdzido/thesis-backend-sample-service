@@ -12,7 +12,14 @@ public class ServiceConfig {
     @Value("${sample.property}")
     String sampleProperty;
 
+    @Value("${sample.password}")
+    String samplePassword;
+
     public String getSampleProperty() {
         return sampleProperty;
+    }
+
+    public String getSamplePassword() {
+        return samplePassword;
     }
 }
