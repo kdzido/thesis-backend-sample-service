@@ -13,7 +13,7 @@ echo "--> Cloud Config service has started"
 echo "-> Starting Sample service"
 java    -Djava.security.egd=file:/dev/./urandom \
         -Dserver.port=$SERVER_PORT \
-        -Deureka.client.serviceUrl.defaultZone=$EUREKASERVER_URI \
+        -Deureka.client.serviceUrl.defaultZone=$EUREKASERVICE_URI \
         -Dspring.cloud.config.uri=$CONFIGSERVICE_URI \
         -Dspring.profiles.active=$PROFILE \
         -jar /usr/local/sample-service/@springBootJar@
