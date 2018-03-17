@@ -1,8 +1,5 @@
 pipeline {
-    agent  any
-//    {
-//        docker 'maven-build-slave-0.1:latest'
-//    }
+    agent { node { label 'docker' } }
 
     stages {
         stage('Commit Stage') {
