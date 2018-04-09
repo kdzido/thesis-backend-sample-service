@@ -8,3 +8,5 @@ spring:
     config:
       enabled: true
       uri: http://localhost:8888
+
+management.security.enabled: false

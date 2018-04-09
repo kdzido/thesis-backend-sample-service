@@ -25,7 +25,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group 'pl.pja.13868.news'
-version '1.0.1'
+version '1.0.2'
 
 repositories {
     // TODO own repo (cloud | private)
