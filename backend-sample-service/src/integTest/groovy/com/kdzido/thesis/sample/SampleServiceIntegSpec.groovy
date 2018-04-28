@@ -67,7 +67,8 @@ class SampleServiceIntegSpec extends Specification {
             try {
                 def resp = sampleServiceClient.get(path: "/v1/config/plain")
                 resp.status == 200 &&
-                    resp.data.name == "plain: This is a Git-backed test property for the sampleservice (default)"
+                        resp.headers.'Content-Type' == "text/plain" &&
+                        resp.data == "plain: This is a Git-backed test property for the sampleservice (default)"
 //                    resp.data.name == "plain: " &&
 //                    resp.data.profiles == ["$serviceProfile"] &&
 //                    resp.data.propertySources.any {
