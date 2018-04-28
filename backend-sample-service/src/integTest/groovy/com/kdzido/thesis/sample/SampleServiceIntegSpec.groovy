@@ -18,15 +18,19 @@ class SampleServiceIntegSpec extends Specification {
 
     final static EUREKASERVICE_URI_1 = System.getenv("EUREKASERVICE_URI_1")
     final static EUREKASERVICE_URI_2 = System.getenv("EUREKASERVICE_URI_2")
-    final static CONFIGSERVICE_URI = System.getenv("CONFIGSERVICE_URI")
+    final static SAMPLESERVICE_URI = System.getenv("SAMPLESERVICE_URI")
 
-    def configServiceClient = new RESTClient("$CONFIGSERVICE_URI")
-
+//    def configServiceClient = new RESTClient("$CONFIGSERVICE_URI")
     def eurekapeer1Client = new RESTClient("$EUREKASERVICE_URI_1").with {
         setHeaders(Accept: 'application/json')
         it
     }
     def eurekapeer2Client = new RESTClient("$EUREKASERVICE_URI_2").with {
+        setHeaders(Accept: 'application/json')
+        it
+    }
+
+    def sampleServiceClient = new RESTClient("$SAMPLESERVICE_URI").with {
         setHeaders(Accept: 'application/json')
         it
     }
@@ -57,28 +61,37 @@ class SampleServiceIntegSpec extends Specification {
         })
     }
 
-    @Ignore
-    @Unroll
-    def "that config service returns configuration of #serviceName / #serviceProfile"() { // readable fail
+    def "that sample service returns central config"() {
         expect:
-        await().atMost(2, TimeUnit.MINUTES).until({
+        await().atMost(3, TimeUnit.MINUTES).until({
             try {
-                def resp = configServiceClient.get(path: "/$serviceName/$serviceProfile")
+                def resp = sampleServiceClient.get(path: "/v1/config/plain")
                 resp.status == 200 &&
-                    resp.data.name == "todoservice" &&
-                    resp.data.profiles == ["$serviceProfile"] &&
-                    resp.data.propertySources.any {
-                        it.name == "https://github.com/kdzido/thesis-config/todoservice/todoservice.yml"  &&
-                                it.source.'todo.property' == "This is a Git-backed test property for the todoservice"
-                    }
+                    resp.data.name == "plain: This is a Git-backed test property for the sampleservice (default)"
+//                    resp.data.name == "plain: " &&
+//                    resp.data.profiles == ["$serviceProfile"] &&
+//                    resp.data.propertySources.any {
+//                        it.name == "https://github.com/kdzido/thesis-config/todoservice/todoservice.yml"  &&
+//                                it.source.'todo.property' == "This is a Git-backed test property for the todoservice"
+//                    }
             } catch (e) {
                 return false
             }
         })
 
-        where:
-        serviceName   | serviceProfile
-        "todoservice" | "default"
+//        await().atMost(3, TimeUnit.MINUTES).until({
+//            try {
+//                def resp = sampleServiceClient.get(path: "/v1/config/cipher")
+//                resp.status == 200 &&
+//                        resp.data.name == "cipher: password"
+//            } catch (e) {
+//                return false
+//            }
+//        })
+
+//        where:
+//        serviceName   | serviceProfile
+//        "todoservice" | "default"
     }
 
 }

@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
  * @author krzysztof.dzido@gmail.com
  */
 @RestController
-@RequestMapping(value="v1")
+@RequestMapping(value="/v1/config/")
 class SampleController {
 
     @Autowired
     ServiceConfig serviceConfig;
 
-    @RequestMapping(value="/config", method = RequestMethod.GET)
-    public String getConfig() {
-        return "plain value: " + serviceConfig.getSampleProperty() + ", password: " + serviceConfig.getSamplePassword();
+    @RequestMapping(value="/plain", method = RequestMethod.GET)
+    public String getConfigPlain() {
+        return "plain: " + serviceConfig.getSampleProperty();
+    }
+
+    @RequestMapping(value="/cipher", method = RequestMethod.GET)
+    public String getConfigCipher() {
+        return "cipher: " + serviceConfig.getSamplePassword();
     }
 
 }
