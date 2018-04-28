@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author krzysztof.dzido@gmail.com
@@ -17,6 +18,8 @@ import java.util.Map;
 @RequestMapping(value="/v1")
 class SampleController {
 
+    static UUID instanceUUID = UUID.randomUUID();
+
     @Autowired
     ServiceConfig serviceConfig;
 
@@ -24,6 +27,11 @@ class SampleController {
     public Map<String, String> getConfigPlain() {
         return ImmutableMap.of("plain" ,serviceConfig.getSampleProperty(),
                 "cipher", serviceConfig.getSamplePassword());
+    }
+
+    @RequestMapping(value="/uuid", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> getInstanceUUID() {
+        return ImmutableMap.of("instanceUUID" , String.valueOf(instanceUUID.toString()));
     }
 
 }
