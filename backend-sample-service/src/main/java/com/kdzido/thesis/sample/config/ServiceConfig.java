@@ -1,4 +1,4 @@
-package com.kdzdo.thesis.sample.config;
+package com.kdzido.thesis.sample.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

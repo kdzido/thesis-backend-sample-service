@@ -1,4 +1,4 @@
-package com.kdzdo.thesis.sample;
+package com.kdzido.thesis.sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -25,11 +25,28 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group 'pl.pja.13868.news'
-version '1.0.2'
+version '1.1.0'
 
 repositories {
+    mavenLocal()
     // TODO own repo (cloud | private)
     mavenCentral()
+}
+
+configurations {
+    integTestCompile.extendsFrom testCompile
+    integTestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    integTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integTest/java')
+            srcDir file('src/integTest/groovy')
+        }
+    }
 }
 
 dependencyManagement {
@@ -49,12 +66,30 @@ dependencies {
     compile('org.springframework.security:spring-security-rsa')
 
     testCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    testCompile "org.codehaus.groovy.modules.http-builder:http-builder:${httpBuilderVersion}"
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.spockframework:spock-core:${spockVersion}"
     testCompile("cglib:cglib-nodep:${cglibVersion}")
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    integTestCompile sourceSets.main.output
+    integTestCompile "cglib:cglib-nodep:${cglibVersion}"
+    integTestCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    integTestCompile "org.spockframework:spock-core:${spockVersion}"
+    integTestCompile "io.rest-assured:rest-assured:${restAssuredVersion}"
+    integTestCompile "org.awaitility:awaitility-groovy:${awaitilityVersion}"
 }
+
+task integTest(type: Test) {
+    testClassesDirs = sourceSets.integTest.output.classesDirs
+    classpath = sourceSets.integTest.runtimeClasspath
+    description ='Integration tests'
+    group = 'verification'
+}
+
+// TODO uncomment?
+//integTest.mustRunAfter test
 
 jar {
     baseName = 'sample-service'

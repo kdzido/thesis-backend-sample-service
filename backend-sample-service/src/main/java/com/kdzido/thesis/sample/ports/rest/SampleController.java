@@ -1,6 +1,6 @@
-package com.kdzdo.thesis.sample.ports.rest;
+package com.kdzido.thesis.sample.ports.rest;
 
-import com.kdzdo.thesis.sample.config.ServiceConfig;
+import com.kdzido.thesis.sample.config.ServiceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
