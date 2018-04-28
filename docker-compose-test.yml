@@ -22,7 +22,7 @@ services:
     environment:
       - PROFILE=peer1
     ports:
-      - "8701:8761"
+      - "7761:8761"
 
   eurekapeer2:
     image: thesis-eurekaservice:snapshot  # TODO fixed?
@@ -30,8 +30,7 @@ services:
     environment:
       - PROFILE=peer2
     ports:
-      - "8702:8761"
-
+      - "7762:8761"
 
   configservice:
     image: thesis-configservice:snapshot  # TODO fixed?
@@ -44,7 +43,7 @@ services:
        EUREKASERVICE_PORT: "8761"
        ENCRYPT_KEY: "COMMON_SYMMETRIC_KEY"
     ports:
-      - "8808:8888"
+      - "7888:8888"
 
   sampleservice:
     image: thesis-sampleservice:snapshot  # TODO fixed?
@@ -62,7 +61,7 @@ services:
       EUREKASERVICE_PORT: "8761"
       ENCRYPT_KEY: "COMMON_SYMMETRIC_KEY"
     ports:
-      - "8090:8090"
+      - "7090:8090"
 #    deploy:
 #      mode: replicated
 #      replicas: 2
