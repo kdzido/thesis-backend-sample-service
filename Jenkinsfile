@@ -35,14 +35,14 @@ pipeline {
             }
         }
 
-//        stage("Publish") { // Local Docker registry
-//            steps {
-//                sh "docker tag thesis-sampleservice:snapshot localhost:5000/thesis-sampleservice"
-//                sh "docker tag thesis-sampleservice:snapshot localhost:5000/thesis-sampleservice:${env.BUILD_NUMBER}"
-//                sh "docker push localhost:5000/thesis-sampleservice"
-//                sh "docker push localhost:5000/thesis-sampleservice:${env.BUILD_NUMBER}"
-//            }
-//        }
+        stage("Publish") { // Local Docker registry
+            steps {
+                sh "docker tag thesis-sampleservice:snapshot localhost:5000/thesis-sampleservice"
+                sh "docker tag thesis-sampleservice:snapshot localhost:5000/thesis-sampleservice:${env.BUILD_NUMBER}"
+                sh "docker push localhost:5000/thesis-sampleservice"
+                sh "docker push localhost:5000/thesis-sampleservice:${env.BUILD_NUMBER}"
+            }
+        }
 
 //        stage("Prod-like") {
 //            steps {
