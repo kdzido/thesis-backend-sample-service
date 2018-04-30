@@ -20,13 +20,12 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.bmuschko.docker-remote-api'
 
 import org.apache.tools.ant.filters.*
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group 'pl.pja.13868.news'
-version '1.2.1'
+version '1.2.2'
 
 repositories {
     mavenLocal()
@@ -106,15 +105,6 @@ task copyDockerFiles(dependsOn: [copyJars], type: Copy) {
 
     String springBootJar = "sample-service-${project.version}.jar"
     filter(ReplaceTokens, tokens: [springBootJar: springBootJar])
-}
-
-task buildDockerImage(type: DockerBuildImage) {
-    dependsOn copyDockerFiles
-    inputDir = project.file("$buildDir/dockerfile/Dockerfile").parentFile
-    // TODO include build-info.properties
-
-    String dockerTag = System.env.PIPELINE_BUILD_ID ?: "snapshot"
-    tag = "qu4rk/thesis-sampleservice:${dockerTag}"
 }
 
 // TODO publish to artifactory?
