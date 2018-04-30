@@ -40,7 +40,7 @@ class SampleServiceIntegSpec extends Specification {
                 def resp = eurekapeer1Client.get(path: "/eureka/apps")
                 return resp.status == 200 &&
                     resp.headers.'Content-Type'.contains(MediaType.APPLICATION_JSON_VALUE) &&
-                    resp.data.applications.application.any {it.name == "CONFIGSERVICE" }
+                    resp.data.applications.application.any {it.name == "SAMPLESERVICE" }
             } catch (e) {
                 return false
             }

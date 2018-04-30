@@ -78,7 +78,6 @@ dependencies {
     integTestCompile "cglib:cglib-nodep:${cglibVersion}"
     integTestCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
     integTestCompile "org.spockframework:spock-core:${spockVersion}"
-    integTestCompile "io.rest-assured:rest-assured:${restAssuredVersion}"
     integTestCompile "org.awaitility:awaitility-groovy:${awaitilityVersion}"
 }
 

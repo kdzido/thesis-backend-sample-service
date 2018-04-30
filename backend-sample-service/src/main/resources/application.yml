@@ -1,6 +1,7 @@
 eureka:
   instance:
-    preferIpAddress: true
+    preferIpAddress: false
+    hostName: sampleservice
   client:
     registerWithEureka: true
     fetchRegistry: true

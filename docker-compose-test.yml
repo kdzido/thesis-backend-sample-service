@@ -46,8 +46,7 @@ services:
       - "7888:8888"
 
   sampleservice:
-    image: thesis-sampleservice:snapshot  # TODO fixed?
-#    image: thesis-sampleservice:latest
+    image: thesis-sampleservice:snapshot
     depends_on:
       - eurekapeer1
       - eurekapeer2
