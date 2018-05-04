@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.10.RELEASE'
+        springBootVersion = '1.5.12.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -25,11 +25,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group 'pl.pja.13868.news'
-version '1.2.2'
+version '1.3.0'
 
 repositories {
     mavenLocal()
-    // TODO own repo (cloud | private)
     mavenCentral()
 }
 
@@ -51,7 +50,7 @@ sourceSets {
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Edgware.SR2"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Edgware.SR3"
     }
 }
 
@@ -62,8 +61,11 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-config')
     compile('org.springframework.cloud:spring-cloud-config-client')
     compile('org.springframework.cloud:spring-cloud-starter-eureka')
+    compile('org.springframework.cloud:spring-cloud-security')
+
 //    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile('org.springframework.security:spring-security-rsa')
+    compile('org.springframework.security.oauth:spring-security-oauth2')
 
     testCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
     testCompile "org.codehaus.groovy.modules.http-builder:http-builder:${httpBuilderVersion}"
@@ -74,9 +76,6 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
     integTestCompile sourceSets.main.output
-    integTestCompile "cglib:cglib-nodep:${cglibVersion}"
-    integTestCompile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-    integTestCompile "org.spockframework:spock-core:${spockVersion}"
     integTestCompile "org.awaitility:awaitility-groovy:${awaitilityVersion}"
 }
 

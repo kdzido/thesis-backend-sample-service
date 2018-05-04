@@ -7,6 +7,9 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 
+# TODO sensible defaults
+security.oauth2.resource.userInfoUri: http://localhost:7999/auth/user
+
 logging:
   level:
     com.netflix: WARN
