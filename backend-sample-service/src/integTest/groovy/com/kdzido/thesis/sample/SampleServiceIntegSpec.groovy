@@ -36,7 +36,7 @@ class SampleServiceIntegSpec extends Specification {
 
     def "that sample service is registered in Eureka peers"() {
         expect:
-        await().atMost(3, TimeUnit.MINUTES).until({
+        await().atMost(5, TimeUnit.MINUTES).until({
             try {
                 def resp = eurekapeer1Client.get(path: "/eureka/apps")
                 return resp.status == 200 &&
@@ -48,7 +48,7 @@ class SampleServiceIntegSpec extends Specification {
         })
 
         and:
-        await().atMost(3, TimeUnit.MINUTES).until({
+        await().atMost(5, TimeUnit.MINUTES).until({
             try {
                 def resp = eurekapeer2Client.get(path: "/eureka/apps")
                 return resp.status == 200 &&
@@ -70,7 +70,7 @@ class SampleServiceIntegSpec extends Specification {
                 password: "readerpassword"]
 
         expect:
-        await().atMost(4, TimeUnit.MINUTES).until({
+        await().atMost(5, TimeUnit.MINUTES).until({
             try {
                 def authServerResp = authServiceClient.post(
                         path: "/auth/oauth/token",
@@ -102,7 +102,7 @@ class SampleServiceIntegSpec extends Specification {
         authServiceClient.auth.basic("newsapp", "newsappsecret")
 
         expect:
-        await().atMost(4, TimeUnit.MINUTES).until({
+        await().atMost(5, TimeUnit.MINUTES).until({
             try {
                 def sampleServiceClient = new RESTClient("$SAMPLESERVICE_URI").with {
                     setHeaders(Accept: MediaType.APPLICATION_JSON_VALUE,
@@ -128,7 +128,7 @@ class SampleServiceIntegSpec extends Specification {
                 password: "adminpassword"]
 
         expect:
-        await().atMost(4, TimeUnit.MINUTES).until({
+        await().atMost(5, TimeUnit.MINUTES).until({
             try {
                 def authServerResp = authServiceClient.post(
                         path: "/auth/oauth/token",
@@ -163,7 +163,7 @@ class SampleServiceIntegSpec extends Specification {
                 password: "readerpassword"]
 
         expect:
-        await().atMost(4, TimeUnit.MINUTES).until({
+        await().atMost(5, TimeUnit.MINUTES).until({
             try {
                 def authServerResp = authServiceClient.post(
                         path: "/auth/oauth/token",
