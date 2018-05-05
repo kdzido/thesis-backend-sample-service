@@ -8,7 +8,7 @@ services:
       - .:/appsrc
       - ./rootGradle:/root/.gradle
     working_dir: /appsrc
-    command: bash -c "./gradlew clean build copyDockerFiles"
+    command: bash -c "./gradlew clean build copyDockerFiles --no-daemon"
 
   app:
     build:
@@ -103,4 +103,4 @@ services:
       - SAMPLESERVICE_URI=http://sampleservice:8090
       - ENCRYPT_KEY="COMMON_SYMMETRIC_KEY"
     working_dir: /appsrc
-    command: bash -c "ping -c 1 eurekapeer1 && ping -c 1 eurekapeer2 && ping -c 1 configservice && ./gradlew integTest"
+    command: bash -c "ping -c 1 eurekapeer1 && ping -c 1 eurekapeer2 && ping -c 1 configservice && ./gradlew integTest --no-daemon"
