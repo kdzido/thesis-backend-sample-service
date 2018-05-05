@@ -118,4 +118,76 @@ class SampleServiceIntegSpec extends Specification {
         })
     }
 
+    def "that delete of resource is allowed with ADMIN role"() {
+        setup:
+        authServiceClient.auth.basic("newsapp", "newsappsecret")
+        final passwordGrant = [
+                grant_type: "password",
+                scope: "mobileclient",
+                username: "admin",
+                password: "adminpassword"]
+
+        expect:
+        await().atMost(4, TimeUnit.MINUTES).until({
+            try {
+                def authServerResp = authServiceClient.post(
+                        path: "/auth/oauth/token",
+                        body: passwordGrant,
+                        requestContentType : URLENC)    // TODO multipart/form-data
+
+                // token extracted
+                final String accessToken = authServerResp.data.'access_token'
+                assert accessToken.isEmpty() == false
+
+                def sampleServiceClient = new RESTClient("$SAMPLESERVICE_URI").with {
+                    setHeaders(Accept: MediaType.APPLICATION_JSON_VALUE,
+                            Authorization: "Bearer $accessToken")
+                    it
+                }
+                def resp =  sampleServiceClient.delete(path: "/v1/delete")
+                return resp.status == 204
+
+            } catch (e) {
+                return false
+            }
+        })
+    }
+
+    def "that forbids delete of resource without authorization"() {
+        setup:
+        authServiceClient.auth.basic("newsapp", "newsappsecret")
+        final passwordGrant = [
+                grant_type: "password",
+                scope: "mobileclient",
+                username: "reader",
+                password: "readerpassword"]
+
+        expect:
+        await().atMost(4, TimeUnit.MINUTES).until({
+            try {
+                def authServerResp = authServiceClient.post(
+                        path: "/auth/oauth/token",
+                        body: passwordGrant,
+                        requestContentType : URLENC)    // TODO multipart/form-data
+
+                // token extracted
+                final String accessToken = authServerResp.data.'access_token'
+                assert accessToken.isEmpty() == false
+
+                def sampleServiceClient = new RESTClient("$SAMPLESERVICE_URI").with {
+                    setHeaders(Accept: MediaType.APPLICATION_JSON_VALUE,
+                            Authorization: "Bearer $accessToken")
+                    it
+                }
+                sampleServiceClient.delete(path: "/v1/delete")
+                return false
+
+            } catch (e) {
+                assert e.response.status == 403
+                return true
+            }
+        })
+    }
+
+
 }
